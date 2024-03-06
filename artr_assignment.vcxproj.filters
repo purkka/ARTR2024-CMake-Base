@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="assets">
+      <UniqueIdentifier>{24240a51-8fdb-478f-8c1c-27cbca7adc3f}</UniqueIdentifier>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{1d345cf5-0451-42e0-83a8-6a3f5a7203ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="host_code">
+      <UniqueIdentifier>{e0dfc653-ff87-401e-b5fe-1d2e0ca71dda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="host_code\utils">
+      <UniqueIdentifier>{7f19bc14-4462-496e-89de-56417d26e91c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\utils">
+      <UniqueIdentifier>{47f8f46c-4a24-4067-810e-31cb07e9dfd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\terrain">
+      <UniqueIdentifier>{93397dd7-e314-425a-ae19-76fa244e1cc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="host_code\precompiled_headers">
+      <UniqueIdentifier>{fa75ce15-fa1a-4879-b38d-609f6093a841}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\ibl">
+      <UniqueIdentifier>{436ac6c5-cfb9-4add-99cd-dd1a7b690343}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\ray_tracing">
+      <UniqueIdentifier>{5b65fd74-db41-4766-8f95-6ef2738f4701}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="host_code\assignment1.cpp">
+      <Filter>host_code</Filter>
+    </ClCompile>
+    <ClCompile Include="host_code\utils\simple_geometry.cpp">
+      <Filter>host_code\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="host_code\precompiled_headers.cpp">
+      <Filter>host_code\precompiled_headers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="host_code\utils\camera_presets.hpp">
+      <Filter>host_code\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="host_code\utils\lights_editor.hpp">
+      <Filter>host_code\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="host_code\utils\simple_geometry.hpp">
+      <Filter>host_code\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="host_code\utils\helper_functions.hpp">
+      <Filter>host_code\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="shaders\lightsource_limits.h">
+      <Filter>shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="shaders\shader_structures.glsl">
+      <Filter>shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="host_code\precompiled_headers.hpp">
+      <Filter>host_code\precompiled_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="host_code\targetver.hpp">
+      <Filter>host_code\precompiled_headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\blinnphong_and_normal_mapping.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\transform_and_pass_on.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\utils\campreset_vispath.vert">
+      <Filter>shaders\utils</Filter>
+    </None>
+    <None Include="shaders\utils\translucent_gizmo.frag">
+      <Filter>shaders\utils</Filter>
+    </None>
+    <None Include="shaders\utils\translucent_gizmo.vert">
+      <Filter>shaders\utils</Filter>
+    </None>
+    <None Include="auto_vk_toolkit\assets\sponza_and_terrain.fscene">
+      <Filter>assets</Filter>
+    </None>
+    <None Include="auto_vk_toolkit\assets\3rd_party\models\parallelepiped_textured.obj">
+      <Filter>assets</Filter>
+    </None>
+    <None Include="auto_vk_toolkit\assets\1st_party\models\sphere.obj">
+      <Filter>assets</Filter>
+    </None>
+    <None Include="shaders\sky_gradient.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\sky_gradient.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\utils\campreset_vispath.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="auto_vk_toolkit\assets\3rd_party\sponza_pbr_dummy.obj">
+      <Filter>assets</Filter>
+    </None>
+    <None Include="auto_vk_toolkit\assets\3rd_party\image_based_lighting\Newport_Loft_Ref.hdr">
+      <Filter>assets\ibl</Filter>
+    </None>
+    <None Include="auto_vk_toolkit\assets\3rd_party\fonts\JetBrainsMono-2.304\fonts\ttf\JetBrainsMono-Regular.ttf">
+      <Filter>assets</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="auto_vk_toolkit\assets\3rd_party\models\terrain_and_debris\large_metal_debris\large_metal_debris_Displacement.jpg">
+      <Filter>assets\terrain</Filter>
+    </Image>
+    <Image Include="auto_vk_toolkit\assets\3rd_party\image_based_lighting\Newport_Loft_8k.jpg">
+      <Filter>assets\ibl</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
+
