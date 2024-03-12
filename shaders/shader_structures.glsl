@@ -10,7 +10,7 @@ struct matrices_and_user_input {
 	mat4 mProjMatrix;
 	// transformation matrix which tranforms to camera's position
 	mat4 mCamPos;
-	// x = tessellation factor, y = displacement strength, z = enable PN-triangles, w unused
+	// x = normal mapping strength, y = displacement strength, z = enable PN-triangles, w unused
 	vec4 mUserInput;
 };
 

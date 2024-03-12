@@ -1,11 +1,14 @@
 #pragma once
 
 #include <serializer.hpp>
+#include <random>
 
 #include "material_image_helpers.hpp"
 #include "model.hpp"
 #include "orca_scene.hpp"
 #include "../../shaders/lightsource_limits.h"
+#include "lights_editor.hpp"
+#include "camera_presets.hpp"
 
 namespace helpers
 {

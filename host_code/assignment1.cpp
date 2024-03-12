@@ -1,3 +1,16 @@
+#include <imgui.h>
+#include <invokee.hpp>
+#include <lightsource_gpu_data.hpp>
+#include <vk_convenience_functions.hpp>
+#include <quake_camera.hpp>
+#include <imgui_manager.hpp>
+#include <sequential_invoker.hpp>
+#include <configure_and_compose.hpp>
+
+#include "lightsource_limits.h"
+#include "utils/helper_functions.hpp"
+#include "utils/simple_geometry.hpp"
+#include "utils/camera_presets.hpp"
 
 /**	Main class for the host code part of ARTR 2024 Assignment 1.
  *
@@ -14,7 +27,9 @@ class assignment1 : public avk::invokee
 	/** Struct definition for push constants used for the draw calls of the scene */
 	struct push_constants
 	{
-		glm::mat4 mModelMatrix;
+        explicit push_constants(const glm::mat4 &mModelMatrix, const int mMaterialIndex) : mModelMatrix(mModelMatrix), mMaterialIndex(mMaterialIndex) {}
+
+        glm::mat4 mModelMatrix;
 		int mMaterialIndex;
 	};
 	
@@ -572,6 +587,7 @@ int main()
 		mainWnd->request_srgb_framebuffer(true);
 		mainWnd->set_presentaton_mode(presentation_mode::mailbox);
 		mainWnd->set_number_of_concurrent_frames(3u);
+        mainWnd->set_number_of_presentable_images(5u);  // Hotfix from https://github.com/cg-tuwien/Auto-Vk-Toolkit/issues/157
 		mainWnd->open();
 
 		// Create one single queue which we will submit all command buffers to:
@@ -585,7 +601,7 @@ int main()
 
 		// Create another element for drawing the GUI via the library Dear ImGui:
 		auto ui = imgui_manager(singleQueue);
-		ui.set_custom_font("assets/JetBrainsMono-Regular.ttf");
+		ui.set_custom_font("assets/3rd_party/fonts/JetBrainsMono-2.304/fonts/ttf/JetBrainsMono-Regular.ttf");
 
 		// Two more utility elements:
 		auto lightsEditor = helpers::create_lightsource_editor(singleQueue, false);

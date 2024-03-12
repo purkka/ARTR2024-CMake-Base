@@ -141,7 +141,7 @@ public:
 		p.radius_xz = aRadiusXZ;
 		p.angular_speed = aAngularSpeed;
 		p.start_angle = aStartAngle;
-		p.focus_type = aFocusType;
+		p.m_focus_type = aFocusType;
 		mPresets.push_back(p);
 		return p.name;
 	}
@@ -162,13 +162,13 @@ public:
 		preset_data p;
 		p.type = preset_type::path;
 		p.name = unique_name(aName);
-		p.path_type = aType;
+		p.m_path_type = aType;
 		p.path_duration = aDuration;
 		p.path_cyclic = aCyclic;
 		p.path_control_points = aControlPoints;
 		p.path_interpolation()->set_control_points(p.path_control_points);
 		p.focus = aFocus;
-		p.focus_type = aFocusType;
+		p.m_focus_type = aFocusType;
 		mPresets.push_back(p);
 		return p.name;
 	}
@@ -250,7 +250,7 @@ public:
 					quakeCam->set_translation(pos);
 					orbitCam->set_translation(pos);
 					glm::vec3 dir;
-					switch (p.focus_type) {
+					switch (p.m_focus_type) {
 					case focus_type::towards_point:		dir = p.focus - pos;	break;
 					case focus_type::away_from_point:	dir = pos - p.focus;	break;
 					case focus_type::forward:
@@ -260,7 +260,7 @@ public:
 						const float da = glm::radians(5.0f) * glm::sign(p.angular_speed);
 						glm::vec3 pos2 = p.center + glm::vec3(cos(angle + da) * p.radius_xz[0], 0, sin(angle + da) * p.radius_xz[1]);
 						dir = pos2 - pos;
-						if (p.focus_type == focus_type::backward) dir = -dir;
+						if (p.m_focus_type == focus_type::backward) dir = -dir;
 						break;
 					}
 					default:							dir = glm::vec3(0);		break;
@@ -288,7 +288,7 @@ public:
 						glm::vec3 pos = p.path_interpolation()->value_at(tSpline);
 						//glm::vec3 dir = p.path_interpolation()->slope_at(tSpline);
 						glm::vec3 dir;
-						switch (p.focus_type) {
+						switch (p.m_focus_type) {
 						case focus_type::towards_point:		dir = p.focus - pos;	break;
 						case focus_type::away_from_point:	dir = pos - p.focus;	break;
 						case focus_type::forward:			dir =  p.path_interpolation()->slope_at(tSpline);	break;
@@ -394,19 +394,19 @@ private:
 		glm::vec2 radius_xz;
 		float angular_speed, start_angle;
 		// path
-		path_type path_type;
+		path_type m_path_type;
 		std::vector<glm::vec3> path_control_points;
 		float path_duration;
 		bool path_cyclic;
 		// all motion
-		focus_type focus_type;
+		focus_type m_focus_type;
 		bool motion_active = false;
 		float motion_start_time;
 
 		bool locked = false;
 
 		avk::cp_interpolation * path_interpolation() {
-			switch (path_type) {
+			switch (m_path_type) {
 			case path_type::bezier:				return &bezier_curve;
 			case path_type::quadratic_bspline:	return &quadratic_uniform_b_spline;
 			case path_type::cubic_bspline:		return &cubic_uniform_b_spline;
@@ -416,7 +416,7 @@ private:
 		}
 		bool is_path_valid() {
 			bool result = (type == preset_type::path) && (path_control_points.size() > 2) && (path_duration > 0.0f);
-			if (path_type == path_type::catmull_rom && path_control_points.size() < 4) result = false;
+			if (m_path_type == path_type::catmull_rom && path_control_points.size() < 4) result = false;
 			return result;
 		}
 	private:
@@ -523,15 +523,15 @@ private:
 						Text("Edit preset \"%s\":", p->name.c_str());
 						static char txtNewName[MAX_NAME_LEN + 1] = "";
 						if (startEditing) {
-							strncpy_s(txtNewName, p->name.c_str(), MAX_NAME_LEN);
+							strncpy(txtNewName, p->name.c_str(), MAX_NAME_LEN);
 						}
 						PushItemWidth(140);
-						InputText("##NewName", txtNewName, _ARRAYSIZE(txtNewName));
+						InputText("##NewName", txtNewName, IM_ARRAYSIZE(txtNewName));
 						SameLine();
 						if (Button("Rename")) {
 							p->name = unique_name(std::string(txtNewName), p);
 							presetToEdit = p->name;
-							strncpy_s(txtNewName, p->name.c_str(), MAX_NAME_LEN);
+							strncpy(txtNewName, p->name.c_str(), MAX_NAME_LEN);
 						}
 						if (p->type == preset_type::location) {
 							auto oldPos = p->translation;
@@ -547,23 +547,23 @@ private:
 							float speedDeg = glm::degrees(p->angular_speed);
 							float angleDeg = glm::degrees(p->start_angle);
 							DragFloat3("Center", &p->center.x, dragSpeedPos);
-							int ftype = static_cast<int>(p->focus_type);
-							if (Combo("Look", &ftype, focusTypeComboStrings)) p->focus_type = static_cast<focus_type>(ftype);
+							int ftype = static_cast<int>(p->m_focus_type);
+							if (Combo("Look", &ftype, focusTypeComboStrings)) p->m_focus_type = static_cast<focus_type>(ftype);
 							DragFloat3("Focus", &p->focus.x, dragSpeedPos);
 							DragFloat2("Radius x/z", &p->radius_xz.x, dragSpeedPos);
 							if (DragFloat("Deg/sec", &speedDeg, dragSpeedAng)) p->angular_speed = glm::radians(speedDeg);
 							if (DragFloat("Start angle", &angleDeg, dragSpeedAng)) p->start_angle = glm::radians(angleDeg);
 						} else if (p->type == preset_type::path) {
-							int pathtype = static_cast<int>(p->path_type);
+							int pathtype = static_cast<int>(p->m_path_type);
 							if (Combo("Type", &pathtype, "Bezier Curve\0Quadratic B-Spline\0Cubic B-Spline\0Catmull-Rom Spline\0")) {
 								p->path_interpolation()->set_control_points({}); // clear control points from old interpolator
-								p->path_type = static_cast<path_type>(pathtype);
+								p->m_path_type = static_cast<path_type>(pathtype);
 								p->path_interpolation()->set_control_points(p->path_control_points); // set control points in new interpolator
 							}
 							InputFloat("Duration (sec)", &p->path_duration);
 							Checkbox("Cyclic", &p->path_cyclic);
-							int ftype = static_cast<int>(p->focus_type);
-							if (Combo("Look##Look_path", &ftype, focusTypeComboStrings)) p->focus_type = static_cast<focus_type>(ftype);
+							int ftype = static_cast<int>(p->m_focus_type);
+							if (Combo("Look##Look_path", &ftype, focusTypeComboStrings)) p->m_focus_type = static_cast<focus_type>(ftype);
 							DragFloat3("Focus##Focus_path", &p->focus.x, dragSpeedPos);
 
 							bool changed = false;
@@ -580,7 +580,7 @@ private:
 							PushID("PathControlPoints");
 							for (int i = 0; i < static_cast<int>(points.size()); ++i) {
 								PushID(i);
-								if (p->path_type == path_type::catmull_rom && (i == 1 || i == static_cast<int>(points.size()) - 1)) Separator(); // lead in/out pointd
+								if (p->m_path_type == path_type::catmull_rom && (i == 1 || i == static_cast<int>(points.size()) - 1)) Separator(); // lead in/out pointd
 
 								if (visualizedPathBefore && (i == mVisualizePathCurrentPointIndex)) {
 									TextColored(ImVec4(0,1,1,1), "#%02d", i);
@@ -792,7 +792,7 @@ private:
 
 	std::string float_to_string(float aFloat) {
 		static char buf[128];
-		snprintf(buf, _ARRAYSIZE(buf), "%.3ff", aFloat);
+		snprintf(buf, IM_ARRAYSIZE(buf), "%.3ff", aFloat);
 		return std::string(buf);
 	}
 
@@ -830,15 +830,15 @@ private:
 				+ vec3_to_string(aPreset->focus) + ", "
 				+ float_to_string(aPreset->angular_speed) + ", "
 				+ float_to_string(aPreset->start_angle) + ", "
-				+ focus_type_to_string(aPreset->focus_type) + ");";
+				+ focus_type_to_string(aPreset->m_focus_type) + ");";
 		} else if (aPreset->type == preset_type::path) {
 			result += "add_path(\"" + aPreset->name + "\", ";
-			switch(aPreset->path_type) {
+			switch(aPreset->m_path_type) {
 			case path_type::bezier:				result += "camera_presets::path_type::bezier";				break;
 			case path_type::quadratic_bspline:	result += "camera_presets::path_type::quadratic_bspline";	break;
 			case path_type::cubic_bspline:		result += "camera_presets::path_type::cubic_bspline";		break;
 			case path_type::catmull_rom:		result += "camera_presets::path_type::catmull_rom";			break;
-			default:							result += "static_cast<camera_presets::path_type>(" + std::to_string(static_cast<int>(aPreset->path_type)) + ")"; break;
+			default:							result += "static_cast<camera_presets::path_type>(" + std::to_string(static_cast<int>(aPreset->m_path_type)) + ")"; break;
 			}
 			result += ", "
 				+ float_to_string(aPreset->path_duration) + ", "
@@ -851,7 +851,7 @@ private:
 				if (!last) result += ", ";
 			}
 			result += "\n}, "
-				+ focus_type_to_string(aPreset->focus_type) + ", "
+				+ focus_type_to_string(aPreset->m_focus_type) + ", "
 				+ vec3_to_string(aPreset->focus) + ");";
 		}
 		return result + "\n";

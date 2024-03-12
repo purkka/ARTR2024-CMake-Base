@@ -1,3 +1,5 @@
+#include <context_vulkan.hpp>
+
 #include "simple_geometry.hpp"
 
 void simple_geometry::create_cone(int subdivision, bool closedBase, glm::mat4 applyTransform)
