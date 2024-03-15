@@ -93,7 +93,7 @@ public:
 			// TODO Bonus Task 1: Uncomment the following to add a 3D model to the scene which can be used to
 			//                    show the differences of orthogonal vs. non-orthogonal tangent space!
 			//
-			//, {"assets/parallelepiped_textured.obj", glm::rotate(1.57f, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::scale(glm::vec3(0.7f))}
+			//, {"assets/3rd_party/models/parallelepiped_textured.obj", glm::rotate(1.57f, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::scale(glm::vec3(0.7f))}
 		}, mQueue);
 		// Create sphere geometry for the skybox (only relevant for Bonus Task 2):
 		mSkyboxSphere.create_sphere();
